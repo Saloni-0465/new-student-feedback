@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import '../index.css';
-import logo from '/Users/salonisharma/student-issues-counseling-system/frontend/src/newton-logo-2.png';
+import logo from './photos/newton-logo-2.png';
 
 function HomePage() {
   return (
