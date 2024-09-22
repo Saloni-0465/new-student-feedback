@@ -21,72 +21,73 @@ function UpdateProfile() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold mb-6 text-blue-800">Update Profile</h1>
-      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-10">
+      <h1 className="text-4xl font-extrabold mb-8 text-blue-800">Update Profile</h1>
+      <form onSubmit={handleSubmit} className="w-full max-w-lg bg-white p-8 rounded-2xl shadow-xl transform transition-transform hover:scale-105">
         {/* Name */}
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 text-sm font-semibold mb-2">Name</label>
+        <div className="mb-6">
+          <label htmlFor="name" className="block text-gray-800 text-lg font-medium mb-2">Name</label>
           <input
             type="text"
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 transition duration-150 ease-in-out"
+            placeholder="Enter your name"
             required
           />
         </div>
 
         {/* Email */}
-        <div className="mb-4 flex items-center">
-          <MdEmail className="text-lg text-gray-500 mr-2"/>
+        <div className="mb-6 flex items-center">
+          <MdEmail className="text-2xl text-gray-600 mr-3"/>
           <input
             type="email"
             id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 transition duration-150 ease-in-out"
             placeholder="Email Address"
             required
           />
         </div>
 
         {/* Phone */}
-        <div className="mb-4 flex items-center">
-          <MdPhone className="text-lg text-gray-500 mr-2"/>
+        <div className="mb-6 flex items-center">
+          <MdPhone className="text-2xl text-gray-600 mr-3"/>
           <input
             type="tel"
             id="phone"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 transition duration-150 ease-in-out"
             placeholder="Phone Number"
             required
           />
         </div>
 
         {/* Course */}
-        <div className="mb-4 flex items-center">
-          <MdSchool className="text-lg text-gray-500 mr-2"/>
+        <div className="mb-6 flex items-center">
+          <MdSchool className="text-2xl text-gray-600 mr-3"/>
           <input
             type="text"
             id="course"
             value={course}
             onChange={(e) => setCourse(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 transition duration-150 ease-in-out"
             placeholder="Course"
             required
           />
         </div>
 
         {/* Year */}
-        <div className="mb-4 flex items-center">
-          <MdCalendarToday className="text-lg text-gray-500 mr-2"/>
+        <div className="mb-6 flex items-center">
+          <MdCalendarToday className="text-2xl text-gray-600 mr-3"/>
           <select
             id="year"
             value={year}
             onChange={(e) => setYear(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 transition duration-150 ease-in-out"
             required
           >
             <option value="">Select Year</option>
@@ -98,10 +99,10 @@ function UpdateProfile() {
         </div>
 
         {/* Submit Button */}
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-8">
           <button
             type="submit"
-            className="px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+            className="px-8 py-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 transition duration-300 transform hover:scale-105"
           >
             Update
           </button>
@@ -112,3 +113,4 @@ function UpdateProfile() {
 }
 
 export default UpdateProfile;
+

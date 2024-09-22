@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function SubmitIssue() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [attachment, setAttachment] = useState(null);
-  const [issueDate, setIssueDate] = useState(''); // Date field
+  const [issueDate, setIssueDate] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // Handle form submission logic here
-    alert('Issue submitted!');
-    // Clear form
-    clearForm();
+    navigate('/dashboard/success'); // Redirect to success page
   };
 
   // Clear form function
@@ -132,5 +132,3 @@ function SubmitIssue() {
 }
 
 export default SubmitIssue;
-
-

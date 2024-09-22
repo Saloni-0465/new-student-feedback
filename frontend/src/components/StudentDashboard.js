@@ -45,7 +45,7 @@ function StudentDashboard() {
                 Update Profile
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="/dashboard/counseling-resources"
                 className={`block py-2 px-4 rounded hover:bg-blue-800 ${activeTab === 'counseling-resources' ? 'bg-blue-800' : ''}`}
@@ -53,8 +53,8 @@ function StudentDashboard() {
               >
                 Counseling Resources
               </Link>
-            </li>
-            <li>
+            </li> */}
+            {/* <li>
               <Link
                 to="/dashboard/contact-support"
                 className={`block py-2 px-4 rounded hover:bg-blue-800 ${activeTab === 'contact-support' ? 'bg-blue-800' : ''}`}
@@ -62,7 +62,7 @@ function StudentDashboard() {
               >
                 Contact Support
               </Link>
-            </li>
+            </li> */}
             <li className="mt-6">
               <button 
                onClick={handleLogout}
@@ -79,7 +79,7 @@ function StudentDashboard() {
         <Routes>
           <Route path="view-issues" element={<ViewIssues />} />
           <Route path="update-profile" element={<UpdateProfile />} />
-          <Route path="counseling-resources" element={<CounselingResources />} />
+          {/* <Route path="counseling-resources" element={<CounselingResources />} /> */}
           <Route path="contact-support" element={<ContactSupport />} />
           {/* Default route if none of the above are matched */}
           <Route path="*" element={<ViewIssues />} />

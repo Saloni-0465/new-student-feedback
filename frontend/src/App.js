@@ -10,6 +10,10 @@ import StudentDashboard from './components/StudentDashboard';
 // import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
 import AuthPage from './components/GetStartedPage';
+import SuccessPage from './components/SuccessPage';
+import AboutPage from './components/AboutPage';
+import ContactPage from './components/ContactSupport';
+import ContactSuccessPage from './components/ContactSuccessPage';
 
 
 function App() {
@@ -26,6 +30,11 @@ function App() {
         {/* <Route path="/student-login" element={<StudentLogin />} />
         <Route path="/admin-login" element={<AdminLogin />} /> */}
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/dashboard/success" element={<SuccessPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contactUs" element={<ContactPage />} />
+        <Route path="/success" element={<ContactSuccessPage />} />
+
       </Routes>
     </>
     
@@ -33,6 +42,9 @@ function App() {
 }
 
 export default App;
+
+
+
 
 
 
