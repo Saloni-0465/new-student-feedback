@@ -1,5 +1,5 @@
 import React from 'react';
-import image from '/Users/salonisharma/Desktop/student-issues-counseling-system/frontend/src/components/photos/IMG_5899.jpg';
+import image from './photos/IMG_5899.jpg';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 

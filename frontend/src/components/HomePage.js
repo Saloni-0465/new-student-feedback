@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../index.css';
-import logo from '/Users/salonisharma/Desktop/student-issues-counseling-system/frontend/src/components/photos/newton-logo-2.png';
-import learningImage from '/Users/salonisharma/Desktop/student-issues-counseling-system/frontend/src/components/photos/undraw_Learning_re_32qv.png';
+import logo from './photos/newton-logo-2.png';
+import learningImage from './photos/undraw_Learning_re_32qv.png';
 
 function HomePage() {
   const [isLoaded, setIsLoaded] = useState(false);
