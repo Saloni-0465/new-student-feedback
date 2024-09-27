@@ -35,9 +35,9 @@ function HomePage() {
           <Link to="/about" className="text-base font-medium text-gray-700 hover:text-blue-700 transition duration-300">
             About
           </Link>
-          <Link to="/dashboard" className="text-base font-medium text-gray-700 hover:text-blue-700 transition duration-300">
+          {/* <Link to="/dashboard" className="text-base font-medium text-gray-700 hover:text-blue-700 transition duration-300">
             Dashboard
-          </Link>
+          </Link> */}
           <Link to="/contactUs" className="text-base font-medium text-gray-700 hover:text-blue-700 transition duration-300">
             Contact Us
           </Link>

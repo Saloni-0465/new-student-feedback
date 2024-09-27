@@ -14,7 +14,8 @@ import SuccessPage from './components/SuccessPage';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactSupport';
 import ContactSuccessPage from './components/ContactSuccessPage';
-
+// import Login from './components/Login';
+// import Signup from './components/Signup';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
         <Route path="/submit-issue" element={<SubmitIssue />} />
         <Route path="/dashboard/*" element={<StudentDashboard />} />
         <Route path="/login" element={<AuthPage />} />
+        {/* <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} /> */}
         {/* <Route path="/student-login" element={<StudentLoginPage />} />
         <Route path="/admin-login" element={<AdminLoginPage />} /> */}
         {/* <Route path="/student-login" element={<StudentLogin />} />
