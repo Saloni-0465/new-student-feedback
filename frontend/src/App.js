@@ -14,6 +14,8 @@ import SuccessPage from './components/SuccessPage';
 import AboutPage from './components/AboutPage';
 import ContactPage from './components/ContactSupport';
 import ContactSuccessPage from './components/ContactSuccessPage';
+import SignupForm from './components/SignupForm';
+import ProfileUpdateSuccess from './components/UpdatedProfile';
 // import Login from './components/Login';
 // import Signup from './components/Signup';
 
@@ -37,6 +39,8 @@ function App() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contactUs" element={<ContactPage />} />
         <Route path="/success" element={<ContactSuccessPage />} />
+        <Route path="/signup" element={<SignupForm />}/>
+        <Route path="/profile-update-success" element={<ProfileUpdateSuccess />} />
 
       </Routes>
     </>

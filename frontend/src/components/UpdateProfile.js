@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MdEmail, MdPhone, MdSchool, MdCalendarToday } from 'react-icons/md'; // Importing Material Icons
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for routing
 
 function UpdateProfile() {
   const [name, setName] = useState('');
@@ -7,17 +8,23 @@ function UpdateProfile() {
   const [phone, setPhone] = useState('');
   const [course, setCourse] = useState('');
   const [year, setYear] = useState('');
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Handle profile update logic here
-    alert('Profile updated successfully!');
+    // Here you can handle your profile update logic (API call, etc.)
+    // For now, we will just simulate the success and navigate
+    alert('Profile updated successfully!'); // Display success alert
+
     // Clear form
     setName('');
     setEmail('');
     setPhone('');
     setCourse('');
     setYear('');
+
+    // Navigate to the success page
+    navigate('/profile-update-success'); 
   };
 
   return (
@@ -113,4 +120,3 @@ function UpdateProfile() {
 }
 
 export default UpdateProfile;
-

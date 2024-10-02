@@ -1,14 +1,10 @@
-const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
+import { Router } from 'express';
+import { login, signup } from '../controllers/authController.js';
 
-// Define routes and their handlers
-router.post('/register', authController.registerUser);
-router.post('/login', authController.loginUser); // Ensure this function is defined in authController
-// router.get('/verify/:token', authController.verifyEmail); // Add route for email verification
-// console.log('authRoutes:', router);
+const router = Router(); // Use Router directly from express
 
-module.exports = router;
+router.post('/signup', signup);
+router.post('/login', login);
 
-
+export default router;
 

@@ -46,7 +46,7 @@ function HomePage() {
           to="/login"
           className="px-4 py-2 text-base font-semibold bg-blue-700 text-white rounded-full shadow-lg hover:bg-blue-600 transition duration-300 transform hover:scale-105"
         >
-          Get Started
+          Login
         </Link>
       </header>
 
@@ -71,16 +71,10 @@ function HomePage() {
             </p>
             <div className="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0">
               <Link
-                to="/submit-issue"
+                to="/signup"
                 className="px-6 py-3 text-lg font-semibold bg-gradient-to-r from-gray-200 to-gray-300 text-gray-800 rounded-full shadow-lg hover:bg-gradient-to-r hover:from-gray-300 hover:to-gray-400 transition duration-300 transform hover:scale-105"
               >
-                Submit an Issue
-              </Link>
-              <Link
-                to="/dashboard"
-                className="px-6 py-3 text-lg font-semibold bg-blue-700 text-white rounded-full shadow-lg hover:bg-blue-600 transition duration-300 transform hover:scale-105"
-              >
-                Go to Dashboard
+                Get Started
               </Link>
             </div>
           </div>
