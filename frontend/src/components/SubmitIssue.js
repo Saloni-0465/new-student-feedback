@@ -1,33 +1,58 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function SubmitIssue() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [attachment, setAttachment] = useState(null);
-  const [issueDate, setIssueDate] = useState('');
+  // const [attachment, setAttachment] = useState(null);
+  const [date, setDate] = useState('');
+  const [loading,setLoading] = useState(false);
+  const [error,setError] = useState('');
   const navigate = useNavigate();
+   
+  const api = 'http://localhost:3002'
 
-  const handleSubmit = (event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
-    navigate('/dashboard/success'); // Redirect to success page
+    if (!title || !description || !category || !date) {
+      setError('All fields are required.');
+      return;
+    }
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await axios.post(`${api}/issue/postIssue`, {
+        title,
+        description,
+        category,
+        date
+      });
+
+      if (response.status === 200) {
+        alert('Issue submitted successfully');
+      }
+    } catch (error) {
+      console.log(date);
+      console.log(error);
+      setError("Error creating issue. Please try again.");
+    }
+    setLoading(false);
+    clearForm();
   };
+
+
 
   // Clear form function
   const clearForm = () => {
     setTitle('');
     setDescription('');
     setCategory('');
-    setAttachment(null);
-    setIssueDate('');
+    setDate('');
   };
 
-  // Handle file upload and preview
-  const handleFileChange = (e) => {
-    setAttachment(e.target.files[0]);
-  };
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-blue-50 p-8">
@@ -76,7 +101,7 @@ function SubmitIssue() {
             <option value="">Select a category</option>
             <option value="academic">Academic</option>
             <option value="personal">Personal</option>
-            <option value="emotional">Emotional</option>
+            <option value="Campus-related">Campus-related</option>
             <option value="other">Other</option>
           </select>
         </div>
@@ -87,29 +112,11 @@ function SubmitIssue() {
           <input
             type="date"
             id="issueDate"
-            value={issueDate}
-            onChange={(e) => setIssueDate(e.target.value)}
+            onChange={(e) => setDate(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
         </div>
-
-        {/* Attachment */}
-        <div className="mb-4">
-          <label htmlFor="attachment" className="block text-gray-700 text-sm font-semibold mb-2">Attachment (Optional)</label>
-          <input
-            type="file"
-            id="attachment"
-            onChange={handleFileChange}
-            className="w-full p-2 border border-gray-300 rounded-lg"
-          />
-          {attachment && (
-            <p className="mt-2 text-sm text-gray-600">
-              Uploaded file: {attachment.name}
-            </p>
-          )}
-        </div>
-
         {/* Buttons */}
         <div className="flex justify-between mt-6">
           <button

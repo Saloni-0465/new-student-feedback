@@ -6,9 +6,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios'; // Import axios
 
-function AuthPage() {
+function LoginPage() {
   const [userType, setUserType] = useState('STUDENT'); // To toggle between student and admin
-  const [fullName, setFullName] = useState(''); // For signup (create account)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null); // To handle errors
@@ -20,22 +19,33 @@ function AuthPage() {
 
   const api = "http://localhost:3002/"
 
-  // Handle login API call
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${api}auth/login`, { email, password,role: userType });
-      const { token,user } = response.data;
+      const endpoint =
+        userType === "STUDENT" ? "student/login" : "admin/login";
+      const response = await axios.post(`${api}${endpoint}`, {
+        email,
+        password,
+        role: userType,
+      });
 
-      // Save the token (you may want to store it in localStorage or context)
-      localStorage.setItem('token', token);
-
-      // Navigate based on user type
-      navigate("/dashboard")
-      
-
+      if (response.status === 200) {
+        if (userType === "STUDENT") {
+          navigate("/dashboard");
+        } else if (userType === "ADMIN") {
+          navigate("/admin-dashboard");
+        }
+      }
     } catch (error) {
-      console.log(error)
-      setError('Invalid email or password');
+      console.log(error);
+
+      if (error.response) {
+        setError(error.response.data.message || "Error logging in. Please try again.");
+      } else if (error.request) {
+        setError("Network error. Please check your connection.");
+      } else {
+        setError("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -105,7 +115,7 @@ function AuthPage() {
   );
 }
 
-export default AuthPage;
+export default LoginPage;
 
 
 

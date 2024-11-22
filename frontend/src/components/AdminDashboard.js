@@ -1,115 +1,8 @@
-import React, { useState } from 'react';
-
-// Example issues as dummy data with status
-const initialIssues = [
-  {
-      id: 1,
-      title: 'Technical Issue with Portal',
-      description: 'Unable to log in to the student portal. Error message displayed is "Invalid credentials".',
-      category: 'Technical',
-      date: '2024-09-15',
-      status: 'Not Resolved',
-    },
-    {
-      id: 2,
-      title: 'Counseling Resources Not Accessible',
-      description: 'The link to the counseling resources is broken. Students cannot access the support documents.',
-      category: 'Resource',
-      date: '2024-09-16',
-      status: 'Resolved',
-    },
-    {
-      id: 3,
-      title: 'Classroom Temperature Issues',
-      description: 'The classroom temperature is too high and uncomfortable for students during lectures.',
-      category: 'Facilities',
-      date: '2024-09-17',
-      status: 'In Progress',
-    },
-    {
-      id: 4,
-      title: 'Wrong Grade Assigned',
-      description: 'Received an incorrect grade for the final exam. The grade does not match the marks obtained.',
-      category: 'Academic',
-      date: '2024-09-18',
-      status: 'Not Resolved',
-    },
-    {
-      id: 5,
-      title: 'Payment Discrepancy',
-      description: 'The payment for the semester fee has not been reflected in the system. Need urgent assistance.',
-      category: 'Financial',
-      date: '2024-09-19',
-      status: 'Resolved',
-    },
-    {
-      id: 6,
-      title: 'Broken Library Equipment',
-      description: 'Several pieces of equipment in the library are not working. This is affecting students\' research work.',
-      category: 'Facilities',
-      date: '2024-09-20',
-      status: 'In Progress',
-    },
-    {
-      id: 7,
-      title: 'Outdated Course Material',
-      description: 'The course material available online is outdated. Need updated versions for current coursework.',
-      category: 'Academic',
-      date: '2024-09-21',
-      status: 'Not Resolved',
-    },
-    {
-      id: 8,
-      title: 'Hostel Maintenance Request',
-      description: 'Requesting maintenance for leaking water pipes in the hostel room.',
-      category: 'Facilities',
-      date: '2024-09-22',
-      status: 'Resolved',
-    },
-    {
-      id: 9,
-      title: 'Technical Issue with Portal',
-      description: 'Unable to log in to the student portal. Error message displayed is "Invalid credentials".',
-      category: 'Technical',
-      date: '2024-09-15',
-      status: 'Not Resolved',
-    },
-    {
-      id: 10,
-      title: 'Counseling Resources Not Accessible',
-      description: 'The link to the counseling resources is broken. Students cannot access the support documents.',
-      category: 'Resource',
-      date: '2024-09-16',
-      status: 'Resolved',
-    },
-    {
-      id: 11,
-      title: 'Classroom Temperature Issues',
-      description: 'The classroom temperature is too high and uncomfortable for students during lectures.',
-      category: 'Facilities',
-      date: '2024-09-17',
-      status: 'In Progress',
-    },
-    {
-      id: 12,
-      title: 'Wrong Grade Assigned',
-      description: 'Received an incorrect grade for the final exam. The grade does not match the marks obtained.',
-      category: 'Academic',
-      date: '2024-09-18',
-      status: 'Not Resolved',
-    },
-    {
-      id: 13,
-      title: 'Payment Discrepancy',
-      description: 'The payment for the semester fee has not been reflected in the system. Need urgent assistance.',
-      category: 'Financial',
-      date: '2024-09-19',
-      status: 'Resolved',
-    },
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function AdminDashboard() {
-  const [issues, setIssues] = useState(initialIssues);
+  const [issues, setIssues] = useState([]);  // Initialize as an empty array
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [status, setStatus] = useState('');
   const [filterDate, setFilterDate] = useState('');
@@ -118,7 +11,67 @@ function AdminDashboard() {
 
   const issuesPerPage = 8;
 
-  // Filter issues based on date and status
+  const statusMapping = {
+    'Not Resolved': 1,
+    'In Progress': 2,
+    'Resolved': 3,
+  };
+  
+
+  const apiUrl = 'http://localhost:3002/issue/getIssues'; 
+
+  const fetchIssues = async () => {
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch issues');
+      }
+
+      const issues = data.data.map((issue) => ({
+        ...issue,
+        status: statusMapping[issue.status_id] || 'Not-resolved',  
+      }));
+
+      setIssues(issues);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchIssues();
+  }, []);
+
+  const updatStatus = async () => {
+    if (!selectedIssue || !status) {
+      console.log("Issue or Status is not selected");
+      return;
+    }
+  
+    try {
+      const response = await axios.put('http://localhost:3002/issue/updateStatus', {
+        issueId: selectedIssue.id,  
+        newStatusId: statusMapping[status]  
+      });
+  
+      if (response.status === 200) {
+        console.log("Status updated successfully");
+        
+        setIssues(issues.map(issue =>
+          issue.id === selectedIssue.id ? { ...issue, status } : issue
+        ));
+        setSelectedIssue(null);
+        setStatus('');
+      } else {
+        console.log("Failed to update status");
+      }
+    } catch (err) {
+      console.log("Error while updating status", err);
+    }
+  };
+  
   const filteredIssues = issues.filter(issue => {
     return (
       (!filterDate || issue.date === filterDate) &&
@@ -126,13 +79,13 @@ function AdminDashboard() {
     );
   });
 
-  // Calculate pagination
+  
   const totalPages = Math.ceil(filteredIssues.length / issuesPerPage);
   const indexOfLastIssue = currentPage * issuesPerPage;
   const indexOfFirstIssue = indexOfLastIssue - issuesPerPage;
   const currentIssues = filteredIssues.slice(indexOfFirstIssue, indexOfLastIssue);
 
-  // Pagination handlers
+ 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
@@ -145,7 +98,7 @@ function AdminDashboard() {
     }
   };
 
-  // Function to handle clicking on a card (issue)
+  
   const handleEdit = (issue) => {
     setSelectedIssue(issue);
     setStatus(issue.status);
@@ -153,11 +106,8 @@ function AdminDashboard() {
 
   const handleUpdate = () => {
     if (selectedIssue) {
-      setIssues(issues.map(issue =>
-        issue.id === selectedIssue.id ? { ...issue, status } : issue
-      ));
-      setSelectedIssue(null);
-      setStatus('');
+
+      updatStatus();
     }
   };
 
@@ -282,20 +232,20 @@ function AdminDashboard() {
                   <option value="Resolved">Resolved</option>
                 </select>
               </div>
-              <div className="flex justify-end space-x-4">
-                <button
-                  type="button"
-                  onClick={handleClose}
-                  className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition duration-300"
-                >
-                  Cancel
-                </button>
+              <div className="flex justify-between">
                 <button
                   type="button"
                   onClick={handleUpdate}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
+                  className="bg-blue-600 text-white px-6 py-2 rounded-md shadow-md hover:bg-blue-700 transition-all"
                 >
-                  Update Status
+                  Update
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClose}
+                  className="bg-gray-300 text-black px-6 py-2 rounded-md shadow-md hover:bg-gray-400 transition-all"
+                >
+                  Close
                 </button>
               </div>
             </form>

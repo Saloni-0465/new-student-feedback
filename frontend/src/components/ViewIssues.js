@@ -1,136 +1,49 @@
-import React, { useState } from 'react';
-
-// Example issues as dummy data with status
-const exampleIssues = [
-  {
-    id: 1,
-    title: 'Technical Issue with Portal',
-    description: 'Unable to log in to the student portal. Error message displayed is "Invalid credentials".',
-    category: 'Technical',
-    date: '2024-09-15',
-    status: 'Not Resolved',
-  },
-  {
-    id: 2,
-    title: 'Counseling Resources Not Accessible',
-    description: 'The link to the counseling resources is broken. Students cannot access the support documents.',
-    category: 'Resource',
-    date: '2024-09-16',
-    status: 'Resolved',
-  },
-  {
-    id: 3,
-    title: 'Classroom Temperature Issues',
-    description: 'The classroom temperature is too high and uncomfortable for students during lectures.',
-    category: 'Facilities',
-    date: '2024-09-17',
-    status: 'In Progress',
-  },
-  {
-    id: 4,
-    title: 'Wrong Grade Assigned',
-    description: 'Received an incorrect grade for the final exam. The grade does not match the marks obtained.',
-    category: 'Academic',
-    date: '2024-09-18',
-    status: 'Not Resolved',
-  },
-  {
-    id: 5,
-    title: 'Payment Discrepancy',
-    description: 'The payment for the semester fee has not been reflected in the system. Need urgent assistance.',
-    category: 'Financial',
-    date: '2024-09-19',
-    status: 'Resolved',
-  },
-  {
-    id: 6,
-    title: 'Broken Library Equipment',
-    description: 'Several pieces of equipment in the library are not working. This is affecting students\' research work.',
-    category: 'Facilities',
-    date: '2024-09-20',
-    status: 'In Progress',
-  },
-  {
-    id: 7,
-    title: 'Outdated Course Material',
-    description: 'The course material available online is outdated. Need updated versions for current coursework.',
-    category: 'Academic',
-    date: '2024-09-21',
-    status: 'Not Resolved',
-  },
-  {
-    id: 8,
-    title: 'Hostel Maintenance Request',
-    description: 'Requesting maintenance for leaking water pipes in the hostel room.',
-    category: 'Facilities',
-    date: '2024-09-22',
-    status: 'Resolved',
-  },
-  {
-    id: 9,
-    title: 'Technical Issue with Portal',
-    description: 'Unable to log in to the student portal. Error message displayed is "Invalid credentials".',
-    category: 'Technical',
-    date: '2024-09-15',
-    status: 'Not Resolved',
-  },
-  {
-    id: 10,
-    title: 'Counseling Resources Not Accessible',
-    description: 'The link to the counseling resources is broken. Students cannot access the support documents.',
-    category: 'Resource',
-    date: '2024-09-16',
-    status: 'Resolved',
-  },
-  {
-    id: 11,
-    title: 'Classroom Temperature Issues',
-    description: 'The classroom temperature is too high and uncomfortable for students during lectures.',
-    category: 'Facilities',
-    date: '2024-09-17',
-    status: 'In Progress',
-  },
-  {
-    id: 12,
-    title: 'Wrong Grade Assigned',
-    description: 'Received an incorrect grade for the final exam. The grade does not match the marks obtained.',
-    category: 'Academic',
-    date: '2024-09-18',
-    status: 'Not Resolved',
-  },
-  {
-    id: 13,
-    title: 'Payment Discrepancy',
-    description: 'The payment for the semester fee has not been reflected in the system. Need urgent assistance.',
-    category: 'Financial',
-    date: '2024-09-19',
-    status: 'Resolved',
-  },
-  // Add more issues as needed
-];
+import React, { useEffect, useState } from 'react';
 
 function ViewIssues() {
-  const [issues] = useState(exampleIssues);
+  const [issues, setIssues] = useState([]);
   const [filterDate, setFilterDate] = useState('');
-  const [filterStatus, setFilterStatus] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedIssue, setSelectedIssue] = useState(null);
 
   const issuesPerPage = 8;
 
-  // Filter issues based on date and status
-  const filteredIssues = issues.filter(issue => {
-    return (
-      (!filterDate || issue.date === filterDate) &&
-      (!filterStatus || issue.status === filterStatus)
-    );
-  });
+  // Mapping status_id to status text
+  const statusMapping = {
+    1: 'unresolved',
+    2: 'in-progress',
+    3: 'resolved',
+  };
+
+  const fetchIssues = async () => {
+    try {
+      const response = await fetch('http://localhost:3002/issue/getIssues');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch issues');
+      }
+
+      const issues = data.data.map((issue) => ({
+        ...issue,
+        status: statusMapping[issue.status_id] || 'Unknown',  // Mapping status_id to status
+      }));
+
+      setIssues(issues);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchIssues();
+  }, []);
 
   // Calculate pagination
-  const totalPages = Math.ceil(filteredIssues.length / issuesPerPage);
+  const totalPages = Math.ceil(issues.length / issuesPerPage);
   const indexOfLastIssue = currentPage * issuesPerPage;
   const indexOfFirstIssue = indexOfLastIssue - issuesPerPage;
-  const currentIssues = filteredIssues.slice(indexOfFirstIssue, indexOfLastIssue);
+  const currentIssues = issues.slice(indexOfFirstIssue, indexOfLastIssue);
 
   // Pagination handlers
   const handleNextPage = () => {
@@ -171,20 +84,6 @@ function ViewIssues() {
             className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
           />
         </div>
-        <div className="flex flex-col sm:flex-row items-center">
-          <label htmlFor="statusFilter" className="mr-2 text-gray-700 font-medium">Filter by Status:</label>
-          <select
-            id="statusFilter"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 transition"
-          >
-            <option value="">All</option>
-            <option value="Not Resolved">Not Resolved</option>
-            <option value="Resolved">Resolved</option>
-            <option value="In Progress">In Progress</option>
-          </select>
-        </div>
       </div>
 
       {/* Issue Cards */}
@@ -201,8 +100,8 @@ function ViewIssues() {
               <div className="flex justify-between items-center">
                 <p className="text-gray-500">Category: {issue.category}</p>
                 <p className={`px-3 py-1 rounded-full text-sm ${
-                  issue.status === 'Resolved' ? 'bg-green-200 text-green-700' :
-                  issue.status === 'In Progress' ? 'bg-yellow-200 text-yellow-700' :
+                  issue.status === 'resolved' ? 'bg-green-200 text-green-700' :
+                  issue.status === 'in-progress' ? 'bg-yellow-200 text-yellow-700' :
                   'bg-red-200 text-red-700'}`}>
                   {issue.status}
                 </p>
@@ -214,7 +113,6 @@ function ViewIssues() {
         )}
       </div>
 
-      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-between mt-6">
           <button
@@ -241,7 +139,6 @@ function ViewIssues() {
         </div>
       )}
 
-      {/* Enhanced Modal for displaying issue details */}
       {selectedIssue && (
         <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
           <div className="relative bg-gradient-to-r from-white via-gray-100 to-gray-50 p-8 rounded-lg shadow-2xl border border-gray-300 max-w-xl w-full transform transition-all duration-500 ease-in-out scale-100 hover:scale-105 animate-fade-in">

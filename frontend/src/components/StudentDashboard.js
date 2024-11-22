@@ -3,26 +3,20 @@ import React, { useState } from 'react';
 import { Link, Route, Routes } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-
-import ViewIssues from './ViewIssues'; // Component for viewing submitted issues
-import UpdateProfile from './UpdateProfile'; // Component for updating profile
-import CounselingResources from './CounselingResources'; // Component for accessing resources
-import ContactSupport from './ContactSupport'; // Component for contacting support
-
+import ViewIssues from './ViewIssues'; 
+import UpdateProfile from './UpdateProfile'; 
+import SubmitIssue from './SubmitIssue'; 
 function StudentDashboard() {
   const [activeTab, setActiveTab] = useState('view-issues');
+  const [issues, setIssues] = useState([]); 
   const navigate = useNavigate();
-  const handleLogout = () => {
-    // Perform any logout logic here (e.g., clearing tokens, user data, etc.)
 
-    // Redirect to homepage
+  const handleLogout = () => {
     navigate('/');
   };
 
-
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
       <aside className="w-64 bg-blue-700 text-white p-6">
         <h2 className="text-2xl font-bold mb-6">Student Dashboard</h2>
         <nav>
@@ -45,28 +39,19 @@ function StudentDashboard() {
                 Update Profile
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link
-                to="/dashboard/counseling-resources"
-                className={`block py-2 px-4 rounded hover:bg-blue-800 ${activeTab === 'counseling-resources' ? 'bg-blue-800' : ''}`}
-                onClick={() => setActiveTab('counseling-resources')}
+                to="/dashboard/submit-issue"
+                className={`block py-2 px-4 rounded hover:bg-blue-800 ${activeTab === 'submit-issue' ? 'bg-blue-800' : ''}`}
+                onClick={() => setActiveTab('submit-issue')}
               >
-                Counseling Resources
+                Submit Issue
               </Link>
-            </li> */}
-            {/* <li>
-              <Link
-                to="/dashboard/contact-support"
-                className={`block py-2 px-4 rounded hover:bg-blue-800 ${activeTab === 'contact-support' ? 'bg-blue-800' : ''}`}
-                onClick={() => setActiveTab('contact-support')}
-              >
-                Contact Support
-              </Link>
-            </li> */}
+            </li>
             <li className="mt-6">
               <button 
-               onClick={handleLogout}
-               className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                onClick={handleLogout}
+                className="w-full py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                 Logout
               </button>
             </li>
@@ -74,15 +59,12 @@ function StudentDashboard() {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
       <main className="flex-1 p-8">
         <Routes>
-          <Route path="view-issues" element={<ViewIssues />} />
+          <Route path="view-issues" element={<ViewIssues issues={issues} />} />
           <Route path="update-profile" element={<UpdateProfile />} />
-          {/* <Route path="counseling-resources" element={<CounselingResources />} /> */}
-          <Route path="contact-support" element={<ContactSupport />} />
-          {/* Default route if none of the above are matched */}
-          <Route path="*" element={<ViewIssues />} />
+          <Route path="submit-issue" element={<SubmitIssue />} /> {/* New Route for SubmitForm */}
+          <Route path="*" element={<ViewIssues issues={issues} />} />
         </Routes>
       </main>
     </div>
@@ -90,4 +72,3 @@ function StudentDashboard() {
 }
 
 export default StudentDashboard;
-

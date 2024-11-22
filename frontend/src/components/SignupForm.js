@@ -1,53 +1,54 @@
 import React, { useState } from 'react';
-import { FcGoogle } from 'react-icons/fc';
-import { AiFillApple } from 'react-icons/ai';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link
+import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 
-function AuthPage() {
-  const [userType, setUserType] = useState('STUDENT'); // To toggle between student and admin
-  const [fullName, setFullName] = useState(''); // For signup (create account)
+function SignupPage() {
+  const [userType, setUserType] = useState('STUDENT');
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // To handle errors
-  const navigate = useNavigate(); // Initialize navigate
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const api = "http://localhost:3002/";
 
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
 
-  const api = "http://localhost:3002/"
-
-  // Handle create account API call
   const handleCreateAccount = async () => {
+    if (!fullName || !email || !password) {
+      setError('All fields are required.');
+      return;
+    }
+    setError(null);
+    setLoading(true);
+
     try {
-      const response = await axios.post(`${api}auth/signup`, {
+      const endpoint =
+        userType === "STUDENT" ? "student/signup" : "admin/signup";
+      const response = await axios.post(`${api}${endpoint}`, {
         fullName,
         email,
         password,
-        role: userType, // Send userType (student or admin) as the role
+        role: userType,
       });
-      const { user } = response.data;
 
-      // Navigate based on user type after account creation
-      if (user.role === 'STUDENT') {
-        alert("Student Signed up successfully");
-        navigate('/login');
-      } else if (user.role === 'ADMIN') {
-        alert("Admin signed up successfully");
+      if (response.status === 201) {
         navigate('/login');
       }
     } catch (error) {
-      setError('Error creating account. Please try again.');
+      console.log(error);
+      setError("Error creating Account");
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-50">
       <div className="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
-
-        {/* User Type Dropdown */}
         <div className="mb-4">
           <label className="block text-gray-600 mb-2 text-sm">Signup As:</label>
           <select
@@ -59,22 +60,21 @@ function AuthPage() {
             <option value="ADMIN">Admin</option>
           </select>
         </div>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">Create a New {userType} Account</h2>
+          <h2 className="text-2xl font-semibold text-center text-gray-700 mb-6">
+            Create a New {userType} Account
+          </h2>
           <motion.input
             type="text"
             placeholder="Full Name"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
             className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
           />
           <motion.input
             type="email"
@@ -82,9 +82,6 @@ function AuthPage() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full px-4 py-2 mb-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
           />
           <motion.input
             type="password"
@@ -92,19 +89,15 @@ function AuthPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 mb-6 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-300"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
           />
-          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
           <button
-            onClick={handleCreateAccount} // Trigger the account creation action
-            className="w-full py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300"
+            onClick={handleCreateAccount}
+            disabled={loading}
+            className={`w-full py-3 ${loading ? 'bg-gray-400' : 'bg-blue-600'} text-white rounded-lg shadow-lg hover:bg-blue-700 transition duration-300`}
           >
-            Create Account
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
-
-          {/* Already have an account? */}
           <p className="text-sm text-center text-gray-600 mt-4">
             Already have an account?{' '}
             <Link to="/login" className="text-blue-600 hover:underline">
@@ -117,8 +110,4 @@ function AuthPage() {
   );
 }
 
-export default AuthPage;
-
-
-
-
+export default SignupPage;
