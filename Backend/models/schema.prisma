@@ -1,26 +1,46 @@
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
-    provider = "mysql" // Change to mysql for MySQL
-    url      = env("DATABASE_URL")
+  provider = "mysql" // Change to mysql for MySQL
+  url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-    ADMIN
-    STUDENT
-    // Add more roles as needed
+model Student {
+  id        Int      @id @default(autoincrement())
+  fullName  String
+  email     String   @unique
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model User {
-    id        Int      @id @default(autoincrement())
-    fullName  String
-    email     String   @unique
-    password  String
-    role      UserRole // Change this line to use the enum
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Admin {
+  id        Int      @id @default(autoincrement())
+  fullName  String
+  email     String   @unique
+  password  String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
-    @@map("users") // Optional
+model Issues {
+  id          Int      @id @default(autoincrement())
+  status_id   Int      @default(1) 
+  status      Status   @relation(fields: [status_id], references: [status_id])
+  title       String
+  description String
+  category    String
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Status {
+  status_id Int      @id @default(autoincrement())
+  status    String
+  issues    Issues[]
 }

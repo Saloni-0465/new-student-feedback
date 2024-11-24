@@ -8,7 +8,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
     "postinstall": "prisma generate --schema=./models/schema.prisma"
-    
+  },
+  "prisma" : {
+    "seed" : "node seed.js"
   },
   "keywords": [],
   "author": "",
@@ -24,6 +26,7 @@
     "mysql2": "^3.11.3",
     "nodemailer": "^6.9.15",
     "prisma": "^5.20.0",
-    "sequelize": "^6.37.3"
+    "sequelize": "^6.37.3",
+    "socket.io": "^4.8.1"
   }
 }

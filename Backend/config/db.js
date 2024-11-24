@@ -1,25 +1,16 @@
-// db.js
-import mysql from 'mysql2/promise';
-import dotenv from 'dotenv';
+import { PrismaClient } from "@prisma/client";
 
-// Load environment variables
-dotenv.config();
+const prismaClient = new PrismaClient();
 
-// Create the MySQL connection
-const db = await mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME
-});
-
-try {
-    await db.connect();
-    console.log('Connected to MySQL');
-} catch (err) {
-    console.error('Error connecting to MySQL:', err);
+async function connectDB() {
+  try {
+    await prismaClient.$connect();
+    console.log("Database connected successfully.");
+  } catch (error) {
+    console.error("Failed to connect to the database:", error);
+  }
 }
 
-export default db;
+export { prismaClient, connectDB };
 
 

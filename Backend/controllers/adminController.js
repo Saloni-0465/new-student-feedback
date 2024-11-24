@@ -1,29 +1,21 @@
-// controllers/authController.js
-import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import  {prismaClient}  from '../config/db.js';
 
+const prisma = prismaClient;
 
-const prisma = new PrismaClient();
-
-// Register route handler
 const signup = async (req, res) => {
     const { fullName, email, password, role } = req.body;
 
     try {
-        const existingUser = await prisma.user.findUnique({ where: { email } });
+        const existingUser = await prisma.admin.findUnique({ where: { email } });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists' });
         }
 
-        // Password strength validation (optional)
-        if (password.length < 8) {
-            return res.status(400).json({ message: 'Password must be at least 8 characters long' });
-        }
-
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const user = await prisma.user.create({
+        const user = await prisma.admin.create({
             data: {
                 fullName,
                 email,
@@ -32,7 +24,7 @@ const signup = async (req, res) => {
             },
         });
 
-        res.status(201).json({ message: 'User created successfully', user });
+        res.status(201).json({ message: 'Admin created successfully', user });
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Internal server error" });
@@ -41,12 +33,16 @@ const signup = async (req, res) => {
 
 // Login route handler
 const login = async (req, res) => {
-    const { email, password,role } = req.body;
+    const { email, password, role} = req.body;
 
     try {
-        const user = await prisma.user.findUnique({ where: { email } });
+        const user = await prisma.admin.findUnique({ where: { email } });
         if (!user) {
             return res.status(400).json({ message: 'Invalid email or password' });
+        }
+
+        if (role !== 'ADMIN'){
+            return res.status(401).json({ message : "Invalid Credintials for Student role"})
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -56,18 +52,11 @@ const login = async (req, res) => {
 
         const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        res.status(200).json({ message: "User logged in successfully", token });
+        res.status(200).json({ message: "Admin logged in successfully", token });
     } catch (error) {
         console.log(error)
         res.status(500).json({ message: "Internal server error" });
     }
 };
 
-// Export the controllers
 export { signup, login };
-
-// Optional: Gracefully disconnect Prisma on app shutdown
-process.on('SIGINT', async () => {
-    await prisma.$disconnect();
-    process.exit(0);
-});

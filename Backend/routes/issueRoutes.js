@@ -1,11 +1,11 @@
-// const express = require('express');
-// const router = express.Router();
-// const issueController = require('../controllers/issueController');
 
-// // Submit Issue
-// router.post('/submit', issueController.submitIssue);
+import { Router } from "express";
+import {getAllissues, postIssues, updateStatus} from "../controllers/IssuesController.js";
 
-// // Get Issues
-// router.get('/', issueController.getIssues);
+const router = new Router()
 
-// module.exports = router;
+router.get("/getIssues",getAllissues)
+router.post("/postIssue", postIssues)
+router.put("/updateStatus", updateStatus)
+
+export default router;
